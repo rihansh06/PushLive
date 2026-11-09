@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client-js"
+  
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+
+  
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model deployments {
+  id          Int       @id @default(autoincrement())
+  project_id  Int
+  status      String    @default("queued")
+  logs        String?
+  created_at  DateTime? @default(now()) @db.Timestamptz(6)
+  finished_at DateTime? @db.Timestamptz(6)
+  projects    projects  @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model projects {
+  id          Int           @id @default(autoincrement())
+  user_id     Int
+  name        String        @unique
+  repo_url    String
+  branch      String        @default("main")
+  created_at  DateTime?     @default(now()) @db.Timestamptz(6)
+  deployments deployments[]
+  users       users         @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model users {
+  id            Int        @id @default(autoincrement())
+  email         String     @unique
+  password_hash String
+  created_at    DateTime?  @default(now()) @db.Timestamptz(6)
+  projects      projects[]
+}
