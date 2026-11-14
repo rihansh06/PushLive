@@ -1,4 +1,4 @@
-import { signUpService } from "../services/authService.js";
+import { loginService, signUpService } from "../services/authService.js";
 
 const signUpController= async (req,res)=>{
    const{email,password}=req.body ?? {};
@@ -9,4 +9,12 @@ const signUpController= async (req,res)=>{
 
 }
 
-export {signUpController}
+const loginController= async (req,res)=>{
+    const {email,password}=req.body ?? {};
+
+    const user=await loginService(email,password);
+
+    return res.status(200).json(user);
+}
+
+export {signUpController,loginController}

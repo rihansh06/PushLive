@@ -1,6 +1,6 @@
 
 import { AppError } from "../utils/AppError.js";
-const EMAIL_RE = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+{2,}\$/;
+const EMAIL_RE = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/ ;
 const PASSWORD_RE = /^\S{8,72}$/;
 export const validateAuth=(req,res,next)=>{
     const {email,password,confirmPassword}=req.body ?? {};
